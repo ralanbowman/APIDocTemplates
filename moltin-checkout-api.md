@@ -56,6 +56,14 @@ Add a selected product into the customer's shopping cart
 ### Sample Request
 
 ```
+curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
+	-H "Authorization: Bearer XXXX" \
+	-d "type: cart_item" \  
+	-d "id: 12345" \
+	-d "quanity: 1"
+```
+
+```
 curl -X POST https://api.moltin.com/v2/carts/{reference}/items \ 
   -H "Authorization: Bearer XXXX" \
   -d "type: cart_item" \
