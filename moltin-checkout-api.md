@@ -63,13 +63,13 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
 	-d "quanity: 1"
 ```
 
-```
-curl -X POST https://api.moltin.com/v2/carts/{reference}/items \ 
-  -H "Authorization: Bearer XXXX" \
-  -d "type: cart_item" \
-  -d "id: 1234567" \
--d "quantity: 1"
-```
+| Element     | Description     |  Type    |  Required    |   Notes   |
+|-------------|-----------------|----------|--------------|-----------|
+|  **Authorization**  |    Authorization token        |  Bearer token   |  Required  |      |
+|  **type**  |  Cart item   |  string   |  Required       |  `cart_item` or `custom_item`    |
+|  **id**  |  Product ID  |  string   |  Required   |  Unique product ID    |
+|  **quantity**  | How many of each product   |  integer   |  Required       |  &nbsp;   |
+
 
 
 ### Sample Response
