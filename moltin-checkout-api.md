@@ -60,7 +60,7 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
   -H "Authorization: Bearer XXXX" \
   -d "type: cart_item" \
   -d "id: 1234567" \
-	-d "quantity: 1"
+-d "quantity: 1"
 ```
 
 
