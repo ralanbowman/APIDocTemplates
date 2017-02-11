@@ -2,7 +2,7 @@
 
 ## Quickstart 
 
-The checkout flow adds products to a customer’s shopping cart, retrieves the cart contents, and moves them through the order and payment process. The checkout flow consists of four steps:  
+The checkout flow adds products to a customer’s shopping cart, retrieves the cart contents, and moves them through the order and payment process. The process consists of four steps:  
 
 1. Add a product to a cart   
 2. Get cart contents   
@@ -10,19 +10,19 @@ The checkout flow adds products to a customer’s shopping cart, retrieves the c
 4. Process payment  
 
 
-This Quickstart will walk you through the API requests needed to complete the basic checkout process.
+This Quickstart will walk you through the API requests needed to complete the checkout process.
 
 ---
 
 ## Before you begin - authentication 
 
-In order to send API requests, you will need a bearer token that is generated from your store keys, which are found in the [Accounts Management Dashboard](https://accounts.moltin.com/ "Accounts Management Dashboard"). 
+In order to send API requests, you will need a bearer token that is generated from your store keys, which are found in the [Accounts Management Dashboard](https://accounts.moltin.com/ "Accounts Management Dashboard"). You will need your **Client ID** and your **Client Secret**. 
 
 ### Bearer token request
 
-To retrieve the bearer token, make a `POST` request using your unique `client_id` and `client_secret`, with a `grant_type` of `client_credentials`. 
+To retrieve the bearer token, make a `POST` request using your unique `client_id` (Client ID) and `client_secret` (Client Secret), with a `grant_type` of `client_credentials`. 
 
-```
+```bash
 curl -X POST https://api.moltin.com/oauth/access_token \ 
   -d "client_id=XXX" \
   -d "client_secret=XXX" \
@@ -41,7 +41,7 @@ curl -X POST https://api.moltin.com/oauth/access_token \
 }
 ```
 
-The value you need is the `access_token` which is unique to you. 
+The value you need is the `access_token` which is unique to you. In your API requests this will be called the **Bearer** token. 
 
 --- 
 
@@ -63,12 +63,12 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
 	-d "quanity: 1"
 ```
 
-| Element     | Description     |  Type    |  Required    |   Notes   |
+| Parameter     | Description     |  Type    |  Required    |   Notes   |
 |-------------|-----------------|----------|--------------|-----------|
 |  **Authorization**  |    Authorization token        |  Bearer token   |  Required  |      |
 |  **type**  |  Cart item   |  string   |  Required       |  `cart_item` or `custom_item`    |
 |  **id**  |  Product ID  |  string   |  Required   |  Unique product ID    |
-|  **quantity**  | How many of each product   |  integer   |  Required       |  &nbsp;   |
+|  **quantity**  | Product count   |  integer   |  Required       |  &nbsp;   |
 
 
 
