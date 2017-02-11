@@ -10,17 +10,17 @@ The checkout flow adds products to a customer’s shopping cart, retrieves the c
 4. Process payment  
 
 
-This QuickStart will walk you through the API requests needed to complete the basic checkout process.
+This Quickstart will walk you through the API requests needed to complete the basic checkout process.
 
 ---
 
 ## Before you begin - authentication 
 
-In order to send API requests, you will need a bearer token that is generated from your store keys, which are found in your [Accounts Management Dashboard](https://accounts.moltin.com/ "Accounts Management Dashboard"). 
+In order to send API requests, you will need a bearer token that is generated from your store keys, which are found in the [Accounts Management Dashboard](https://accounts.moltin.com/ "Accounts Management Dashboard"). 
 
 ### Bearer token request
 
-To retrieve the bearer token, make a POST request using your unique `client_id` and `client_secret`, with a `grant_type` of `client_credentials`. 
+To retrieve the bearer token, make a `POST` request using your unique `client_id` and `client_secret`, with a `grant_type` of `client_credentials`. 
 
 ```
 curl -X POST https://api.moltin.com/oauth/access_token \ 
@@ -33,7 +33,7 @@ curl -X POST https://api.moltin.com/oauth/access_token \
 
 ```json
 {
-  "expires": XXXXX,
+  "expires": 246810,
   "identifier": "client_credentials",
   "expires_in": 3600,
   "access_token": "XXXXX",
@@ -46,33 +46,22 @@ The value you need is the `access_token` which is unique to you.
 --- 
 
 ## Step 1. Add a product to a cart
-(what the endpoint actually does, like "Retrieve all user names")
 
-Description (a description, such as "Retrieves all user names available in customer account")
+Add a selected product into the customer's shopping cart 
 
-### Endpoint
+### Method and Endpoint
 
-`resource/endpoint/{parameter}`
-
-### Method and URL
-
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
-
-
-### Query parameters
-
-| Parameter   | Description     | Type     | Required     | Notes     |
-|-------------|-----------------|----------|--------------|-----------|
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-
+`POST /v2/carts/{reference}/items`
 
 ### Sample Request
 
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
-
-`curl --get --include 'https://api.example.com/resource/endpoint/parameter`
+```
+curl -X POST https://api.moltin.com/v2/carts/{reference}/items \ 
+  -H "Authorization: Bearer XXXX" \
+  -d "type: cart_item" \
+  -d "id: 1234567" \
+	-d "quantity: 1"
+```
 
 
 ### Sample Response
