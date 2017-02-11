@@ -10,14 +10,17 @@ The checkout flow adds products to a customer’s shopping cart, retrieves the c
 4. Process payment  
 
 
-This QuickStart will walk you through the API endpoints needed to complete the basic checkout process.
+This QuickStart will walk you through the API requests needed to complete the basic checkout process.
 
 ---
 
 ## Before you begin - authentication 
 
-In order to send API requests, you will need a bearer token that is generated from your store keys, which are found in your [Accounts Management Dashboard](https://accounts.moltin.com/ "Accounts Management Dashboard"). You can retrieve your bearer token using `cURL`. 
+In order to send API requests, you will need a bearer token that is generated from your store keys, which are found in your [Accounts Management Dashboard](https://accounts.moltin.com/ "Accounts Management Dashboard"). 
 
+### Bearer token request
+
+To retrieve the bearer token, make a POST request using your unique `client_id` and `client_secret`, with a `grant_type` of `client_credentials`. 
 
 ```
 curl -X POST https://api.moltin.com/oauth/access_token \ 
@@ -25,6 +28,20 @@ curl -X POST https://api.moltin.com/oauth/access_token \
   -d "client_secret=XXX" \
   -d "grant_type=client_credentials"
   ```
+
+### Response 
+
+```json
+{
+  "expires": XXXXX,
+  "identifier": "client_credentials",
+  "expires_in": 3600,
+  "access_token": "XXXXX",
+  "token_type": "Bearer"
+}
+```
+
+The value you need is the `access_token` which is unique to you. 
 
 --- 
 
