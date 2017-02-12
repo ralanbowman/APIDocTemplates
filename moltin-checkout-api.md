@@ -23,10 +23,10 @@ In order to send API requests, you will need a bearer token that is generated fr
 To retrieve the bearer token, make a `POST` request using your unique `client_id` (Client ID) and `client_secret` (Client Secret), with a `grant_type` of `client_credentials`. 
 
 ```bash
-curl -X POST https://api.moltin.com/oauth/access_token \ 
-  -d "client_id=XXX" \
-  -d "client_secret=XXX" \
-  -d "grant_type=client_credentials"
+curl -X POST https://api.moltin.com/oauth/access_token \   
+  -d "client_id=XXX" \  
+  -d "client_secret=XXX" \  
+  -d "grant_type=client_credentials"  
   ```
 
 ### Response 
@@ -41,13 +41,13 @@ curl -X POST https://api.moltin.com/oauth/access_token \
 }
 ```
 
-The value you need is the `access_token` which is unique to you. In your API requests this will be called the **Bearer** token. 
+The value you need is the `access_token` which is unique to you. In your API requests this will be a header called the **Bearer** token. 
 
 --- 
 
 ## Step 1. Add a product to a cart
 
-Add a selected product into the customer's shopping cart 
+This is the API request that is sent when when a customer adds a product to their shopping cart. 
 
 ### Method and Endpoint
 
@@ -66,13 +66,15 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
 | Parameter     | Description     |  Type    |  Required    |   Notes   |
 |-------------|-----------------|----------|--------------|-----------|
 |  **Authorization**  |    Authorization token        |  Bearer token   |  Required  |      |
-|  **type**  |  Cart item   |  string   |  Required       |  `cart_item` or `custom_item`    |
+|  **type**  |  Type of item to add   |  string   |  Required       | Valid values are `cart_item` or `custom_item`    |
 |  **id**  |  Product ID  |  string   |  Required   |  Unique product ID    |
 |  **quantity**  | Product count   |  integer   |  Required       |  &nbsp;   |
 
 
 
 ### Sample Response
+
+START HERE, waiting on reply from Moltin
 
 {
   "query": {
@@ -95,33 +97,28 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
 
 
 ## Step 2. Get cart contents
-(what the endpoint actually does, like "Retrieve all user names")
 
-Description (a description, such as "Retrieves all user names available in customer account")
+After the customer adds products to the cart, you can then retrieve the cart contents to start the checkout process. 
 
-### Endpoint
+### Method and Endpoint
 
-`resource/endpoint/{parameter}`
-
-### Method and URL
-
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
-
-
-### Query parameters
-
-| Parameter   | Description     | Type     | Required     | Notes     |
-|-------------|-----------------|----------|--------------|-----------|
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-
+`GET /v2/carts/{reference}/items`
 
 ### Sample Request
 
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
+```bash
+curl -X GET https://api.moltin.com/v2/carts/{reference}/items \
+	-H "Authorization: Bearer XXXX" \
+	-H "X-MOLTIN-CURRECY: USD" \  
+	-H "X-MOLTIN-LOCALE: US" 
+```
 
-`curl --get --include 'https://api.example.com/resource/endpoint/parameter`
+| Parameter   | Description     | Type     | Required     | Notes     |
+|-------------|-----------------|----------|--------------|-----------|
+|  **Authorization**  |    Authorization token        |  Bearer token   |  Required  |      |
+|  **X-MOLTIN-CURRENCY**  |  Currency set by customer  |  string   |  Optional       | Valid values are: `EUR`, `GPB`, and `USD`  |
+|  **X-MOLTIN-LOCALE**  | Location set by customer   |  string   |  Optional   | &nbsp;     |
+
 
 
 ### Sample Response
@@ -248,12 +245,3 @@ Description (a description, such as "Retrieves all user names available in custo
 |  **Value**  |    Value        |  Value   |  Value    |
 |  **Value**  |    Value        |  Value   |  Value    |
 
----
-
-### Status Codes and Errors
-
-|     Code    | Description     |  Notes       |
-|-------------|-----------------|--------------|
-|  **Value**  |    Value        |  Value       |
-|  **Value**  |    Value        |  Value       |
-|  **Value**  |    Value        |  Value       |
