@@ -228,29 +228,37 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/checkout \
 
 
 ## Step 4. Process payment
-(what the endpoint actually does, like "Retrieve all user names")
 
-Description (a description, such as "Retrieves all user names available in customer account")
+After converting the cart into an order, you will receive an **`id`** that will then be added to the `POST` request as an **`order_id`** that is sent to the payment gateway. 
 
 ### Method and Endpoint
 
-`GET /v2/carts/{reference}/items`
+`POST /v2/orders/{order_id}/payments`
 
 ### Sample Request
 
 ```bash
-curl -X GET https://api.moltin.com/v2/carts/{reference}/items \
-	-H "Authorization: Bearer XXXX" \
-	-H "X-MOLTIN-CURRECY: USD" \  
-	-H "X-MOLTIN-LOCALE: US" 
+curl -X POST https://api.moltin.com/v2/orders/{order_id}/payments \  
+  -d "gateway: slug" \  
+  -d "method: purchase" \ 
+  -d "first_name: John" \  
+  -d "last_name: Doe" \  
+  -d "number: 1234567891234567" \  
+  -d "expiry_month: 01" \  
+  -d "expiry_year: 2012" \  
+  -d "cvv: 246"  
 ```
 
 | Parameter   | Description     | Type     | Required     | Notes     |
 |-------------|-----------------|----------|--------------|-----------|
-|  **Authorization**  |    Access token   |  Bearer token   |  Required  |      |
-|  **X-MOLTIN-CURRENCY**  |  Currency set by customer  |  string   |  Optional | Valid values are: `EUR`, `GPB`, and `USD`  |
-|  **X-MOLTIN-LOCALE**  | Location set by customer   |  string   |  Optional   | &nbsp;     |
-
+|  **gateway**  | Slug ID of gateway   |  string   |  Required   | |
+|  **method**  | Payment method  |  string   |  Required  | Valid values: `purchase`  |
+|  **first_name** | First name of card holder   |  string   |  Required | First name as it appears on credit card  |
+|  **last_name**  |  Last name of card holder  |  string   |  Required  | Last name as it appears on credit card     |
+|  **number**  |    Credit card number    |  string   |  Required   | The credit card that will be charged     |
+|  **expiry_month**  | Month the credit card expires |  string   |  Required | Month in MM format  |
+|  **expiry_year**  |    Year the credit card expires |  string   |  Required | Year in YYYY format |
+|  **cvv**  | CVV code   |  string   |  Required   | CVV code from back of credit card     |
 
 ### Sample Response
 
