@@ -27,7 +27,7 @@ curl -X POST https://api.moltin.com/oauth/access_token \
   -d "client_id=XXX" \  
   -d "client_secret=XXX" \  
   -d "grant_type=client_credentials"  
-  ```
+```
 
 ### Response 
 
@@ -41,7 +41,7 @@ curl -X POST https://api.moltin.com/oauth/access_token \
 }
 ```
 
-The value you need is the `access_token` which is unique to you. In your API requests this will be a header called the **Bearer** token. 
+The value you need is the `access_token` which is unique to you. In your API requests this will be a header called the **Bearer** token and will be sent as `"Authorization: Bearer XXXX"`.
 
 --- 
 
@@ -65,7 +65,7 @@ curl -X POST https://api.moltin.com/v2/carts/{reference}/items \
 
 | Parameter     | Description     |  Type    |  Required    |   Notes   |
 |-------------|-----------------|----------|--------------|-----------|
-|  **Authorization**  |    Authorization token        |  Bearer token   |  Required  |      |
+|  **Authorization**  |    Access token  |  Bearer token   |  Required  |      |
 |  **type**  |  Type of item to add   |  string   |  Required       | Valid values are `cart_item` or `custom_item`    |
 |  **id**  |  Product ID  |  string   |  Required   |  Unique product ID    |
 |  **quantity**  | Product count   |  integer   |  Required       |  &nbsp;   |
@@ -96,7 +96,7 @@ START HERE, waiting on reply from Moltin
 |  **Value**  |    Value        |  Value   |  Value    |
 
 
-## Step 2. Get cart contents
+## Step 2. Retrieve cart contents
 
 After the customer adds products to the cart, you can then retrieve the cart contents to start the checkout process. 
 
@@ -115,8 +115,8 @@ curl -X GET https://api.moltin.com/v2/carts/{reference}/items \
 
 | Parameter   | Description     | Type     | Required     | Notes     |
 |-------------|-----------------|----------|--------------|-----------|
-|  **Authorization**  |    Authorization token        |  Bearer token   |  Required  |      |
-|  **X-MOLTIN-CURRENCY**  |  Currency set by customer  |  string   |  Optional       | Valid values are: `EUR`, `GPB`, and `USD`  |
+|  **Authorization**  |    Access token   |  Bearer token   |  Required  |      |
+|  **X-MOLTIN-CURRENCY**  |  Currency set by customer  |  string   |  Optional | Valid values are: `EUR`, `GBP`, and `USD`  |
 |  **X-MOLTIN-LOCALE**  | Location set by customer   |  string   |  Optional   | &nbsp;     |
 
 
@@ -142,35 +142,68 @@ curl -X GET https://api.moltin.com/v2/carts/{reference}/items \
 |  **Value**  |    Value        |  Value   |  Value    |
 |  **Value**  |    Value        |  Value   |  Value    |
 
+
 ## Step 3. Convert cart to an order 
-(what the endpoint actually does, like "Retrieve all user names")
 
-Description (a description, such as "Retrieves all user names available in customer account")
+Once you have retrieved the cart contents, you can convert them into an order so they can be purchased. 
 
-### Endpoint
+### Method and Endpoint
 
-`resource/endpoint/{parameter}`
-
-### Method and URL
-
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
-
-
-### Query parameters
-
-| Parameter   | Description     | Type     | Required     | Notes     |
-|-------------|-----------------|----------|--------------|-----------|
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-
+`POST /v2/carts/{reference}/checkout`
 
 ### Sample Request
 
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
+```bash
+curl -X POST https://api.moltin.com/v2/carts/{reference}/checkout \
+  -g \  
+  -H "Authorization: Bearer XXXX" \
+  -d "customer[name]=John Doe" \  
+  -d "customer[email]=jdoe@example.com" \  
+  -d "billing_address[first_name]=John" \  
+  -d "billing_address[last_name]=Doe" \  
+  -d "billing_address[company_name]=JD Company" \  
+  -d "billing_address[line_1]=123 Any Way" \ 
+  -d "billing_address[line_2]=Anytown" \  
+  -d "billing_address[postcode]=12345" \ 
+  -d "billing_address[county]=Any county" \  
+  -d "billing_address[country]=My country" \  
+  -d "shipping_address[first_name]=John" \  
+  -d "shipping_address[last_name]=Doe" \  
+  -d "shipping_address[company_name]=JD Company" \  
+  -d "shipping_address[line_1]=123 Any Way" \ 
+  -d "shipping_address[line_2]=Anytown" \  
+  -d "shipping_address[postcode]=12345" \ 
+  -d "shipping_address[county]=Any county" \  
+  -d "shipping_address[country]=My country" \  
+  -d "shipping_address[instructions]="Leave at door" 
+```
 
-`curl --get --include 'https://api.example.com/resource/endpoint/parameter`
-
+| Parameter   | Description     | Type     | Required     | Notes     |
+|-------------|-----------------|----------|--------------|-----------|
+|  **Authorization**  | Access token  | Bearer token   |  Required  |      |
+|  **data**  |    Cart order data |  JSON object   |  Required       | The cart data that will be converted into the order object  |
+|  **customer**  | Customer information   |  JSON object   |  Required  |  |
+|  **name**  | Customer name |  string   |  Required   | First and last name  |
+|  **email**  |  Email address |  string   |  Required  | Must be a properly formatted email address |
+|  **billing_address**  | Address for billing  |  JSON object |  Required |     |
+|  **first_name**  |  Customer first name  |  string  |  Required  |      |
+|  **last_name**  |    Customer last name |  string   |  Required | |
+|  **company_name**  |  Name of company  |  string   |  Optional  | Company name only supplied if this is a business order |
+|  **line_1**  |  Street address   |  string   |  Required  | |
+|  **line_2**  |  Street address  |  string   |  Optional | Could be used for apartment number  |
+|  **postcode**  | Postal code    |  string   |  Required  | Postal Code or ZIP Code (US) |
+|  **county**  |  Administrative district  |  string   |  Required  | Some locales may use "parish"  |
+|  **country**  |  Country   |  string   |  Required   | |
+|  **shipping_address**  |  Address for shipping  |  JSON object  |  Required | Shipping address may differ from billing address |
+|  **first_name**  |  Customer first name  |  string  |  Required  |      |
+|  **last_name**  |    Customer last name |  string   |  Required | |
+|  **company_name**  |  Name of company  |  string   |  Optional  | Company name only supplied if this is a business order |
+|  **line_1**  |  Street address   |  string   |  Required  | |
+|  **line_2**  |  Street address  |  string   |  Optional | Could be used for apartment number  |
+|  **postcode**  | Postal code    |  string   |  Required  | Postal Code or ZIP Code (US) |
+|  **county**  |  Administrative district  |  string   |  Required  | Some locales may use "parish"  |
+|  **country**  |  Country   |  string   |  Required   | |
+|  **instructions**  |  Shipping instructions |  string   |  Optional | Special instructions for shipper |
 
 ### Sample Response
 
@@ -199,29 +232,24 @@ Description (a description, such as "Retrieves all user names available in custo
 
 Description (a description, such as "Retrieves all user names available in customer account")
 
-### Endpoint
+### Method and Endpoint
 
-`resource/endpoint/{parameter}`
-
-### Method and URL
-
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
-
-
-### Query parameters
-
-| Parameter   | Description     | Type     | Required     | Notes     |
-|-------------|-----------------|----------|--------------|-----------|
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-|  **Value**  |    Value        |  Value   |  Value       | Value     |
-
+`GET /v2/carts/{reference}/items`
 
 ### Sample Request
 
-`METHOD https://api.example.com/resource/endpoint/{parameter}`
+```bash
+curl -X GET https://api.moltin.com/v2/carts/{reference}/items \
+	-H "Authorization: Bearer XXXX" \
+	-H "X-MOLTIN-CURRECY: USD" \  
+	-H "X-MOLTIN-LOCALE: US" 
+```
 
-`curl --get --include 'https://api.example.com/resource/endpoint/parameter`
+| Parameter   | Description     | Type     | Required     | Notes     |
+|-------------|-----------------|----------|--------------|-----------|
+|  **Authorization**  |    Access token   |  Bearer token   |  Required  |      |
+|  **X-MOLTIN-CURRENCY**  |  Currency set by customer  |  string   |  Optional | Valid values are: `EUR`, `GPB`, and `USD`  |
+|  **X-MOLTIN-LOCALE**  | Location set by customer   |  string   |  Optional   | &nbsp;     |
 
 
 ### Sample Response
